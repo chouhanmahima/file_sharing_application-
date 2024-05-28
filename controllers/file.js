@@ -78,10 +78,17 @@ const generateDynamicLink = async (req, res) => {
 };
 
 const downloadFile = async (req, res) => {
-    res.json({
-        success: true,
-        message: "download file API"
-    })
+    try {
+        const fileId = req.params.uuid;
+        const file = await FileModel.findById(fileId);
+        if (!file) {
+          //if DB Doesn't have this file information
+          return res.end("File with given ID not found");
+        }
+        res.download(file.path, file.originalFilename);
+      } catch (err) {
+        res.end("Something went wrong, please try again after sometime");
+      }
 };
 
 const sendFile = async (req, res) => {
