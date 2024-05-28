@@ -1,12 +1,19 @@
 const express = require("express");
+const mongoose = require("mongoose");
 
 const fileRoutes = require("./routes/file");
 
+const app = express();
+// const app = express.urlencoded();
 const PORT = 5000;
 
-const app = express();
 
-app.use(fileRoutes);
+mongoose
+    .connect("mongodb://localhost:27017/filesharingapp")
+    .then(() => console.log("DB Connection established successfully"))
+    .catch((err) => console.log("Error while connecting database", err));
+
+    app.use(fileRoutes);
 
 
 app.listen(PORT, () => {
