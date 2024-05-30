@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const fileRoutes = require("./routes/file");
 
 const app = express();
-// const app = express.urlencoded();
+app.use(express.json());
 const PORT = 5000;
 
 

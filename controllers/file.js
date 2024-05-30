@@ -1,29 +1,10 @@
-const multer = require("multer");
-const path = require("path");
-const { v4: uuidv4 } = require("uuid");
-
 const FileModel = require("../models/file");
-
-//Configuring file storage
-const uploadDirectoryPath = path.join(__dirname, "..", "fileStorage");
-
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, uploadDirectoryPath)
-    },
-    filename: (req, file, cb) => {
-        console.log(file.originalname);
-        const filename = uuidv4() + path.extname(file.originalname);
-        cb(null, filename)
-    },
-})
-
-const upload = multer({
-    storage: storage,
-}).single("file");  // Filename in your form data
+const mailService = require("../services/mailService")
+const fileUploadService = require("../services/uploadService")// Filename in your form data
 
 const uploadFile = async (req, res) => {
     // use the function / instance to upload the file
+    const upload = fileUploadService.single("file");
     upload(req, res, async (error) => {
         // console.log(req.body);
         if (error) {
@@ -92,9 +73,32 @@ const downloadFile = async (req, res) => {
 };
 
 const sendFile = async (req, res) => {
+    console.log(req.body);
+  const { fileId, shareTo } = req.body;
+    const downloadableLink = "http://localhost:5000/files/download/" + fileId;
+    
+    const info = await mailService.sendMail({
+        from: 'process.env.userEmail', // sender address
+        to: shareTo, // list of receivers
+        subject: "A new file has been shared from File Sharing Platform", // Subject line
+        html: `
+        <html>
+        <head>
+        </head>
+        <body>
+          Your friend has shared a new file with you click the below link to download the file
+        <br />
+        <a href="${downloadableLink}">Click Here</a>
+        </body>
+        </html>
+        `,
+      });
+
+      console.log("Message sent: %s", info.messageId);
+
     res.json({
         success: true,
-        message: "send file API"
+        message: "File shared on email successfully"
     })
 };
 
