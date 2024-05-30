@@ -82,15 +82,63 @@ const sendFile = async (req, res) => {
         to: shareTo, // list of receivers
         subject: "A new file has been shared from File Sharing Platform", // Subject line
         html: `
-        <html>
-        <head>
-        </head>
-        <body>
-          Your friend has shared a new file with you click the below link to download the file
-        <br />
-        <a href="${downloadableLink}">Click Here</a>
-        </body>
-        </html>
+        <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Sharing Notification</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        h1 {
+            font-size: 24px;
+            color: #444;
+            text-align: center;
+        }
+        p {
+            font-size: 16px;
+            line-height: 1.5;
+            text-align: center;
+        }
+        a.button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #007bff;
+            text-decoration: none;
+            border-radius: 5px;
+            text-align: center;
+        }
+        a.button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>File Sharing Notification</h1>
+        <p>Your friend has shared a new file with you. Click the button below to download the file.</p>
+        <a href="${downloadableLink}" class="button">Click Here to Download</a>
+    </div>
+</body>
+</html>
+
         `,
       });
 
